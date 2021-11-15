@@ -1,6 +1,6 @@
-DROP TABLE SalesAssoc;
-DROP TABLE Quote;
 DROP TABLE LineItem;
+DROP TABLE Quote;
+DROP TABLE SalesAssoc;
 
 CREATE TABLE SalesAssoc (
 	salesAID INT(12) PRIMARY KEY AUTO_INCREMENT,
@@ -23,7 +23,8 @@ CREATE TABLE Quote (
 	procDateTime TIMESTAMP,
 	commission DECIMAL(8,2),
 	sNotes VARCHAR(4096),
-	csutomerID INT(3) NOT NULL,
+	customerID INT(3) NOT NULL,
+	cusContact VARCHAR(128),
 	FOREIGN KEY(salesAID) REFERENCES SalesAssoc(salesAID)
 );
 
