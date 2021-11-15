@@ -23,6 +23,7 @@ CREATE TABLE Quote (
 	procDateTime TIMESTAMP,
 	commission DECIMAL(8,2),
 	sNotes VARCHAR(4096),
+	csutomerID INT(3) NOT NULL,
 	FOREIGN KEY(salesAID) REFERENCES SalesAssoc(salesAID)
 );
 
