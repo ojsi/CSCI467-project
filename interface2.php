@@ -4,16 +4,47 @@
  * Group 2B
  */
 
+include("credentials.php");	// Store your $username and $password in this file
+
+
+/**
+ * This function connects to the specified database and returns the PDO
+ * object for that connection.
+ *
+ * This function is NOT exception-safe.
+ *
+ * @param dbname the name of the database
+ * @param name the name of the user to login to
+ * @param passwd the password for the user
+ *
+ * @return the PDO object for the established connection (might throw
+ * exception!)
+ */
+function loginToDatabase($dbname, $name, $passwd)
+{
+	// Connect to the mariadb server like normal
+	$dsn = "mysql:host=courses;dbname=" . $dbname;
+	$pdo = new PDO($dsn, $name, $passwd); //make new pdo object
+
+	// Set error mode
+	$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
+	return $pdo;    //return the pdo object that was created
+}
+
+
 try {
 	// connect to our internal quote database
-	$pdo = //TODO how to connect?
-	$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+	// (NOTE these parameters are correct if the DB exists in your NIU MariaDB account, and
+	// if you store your credentials ($username and $password) in a file called 
+	// credentials.php)
+	$pdoQuoteDB = loginToDatabase($username, $username, $password);
 	
 	// display all finalized quotes
 	$query = "SELECT * FROM Quote
-		WHERE status = 'finalized'
-		;";
-	$resultSet = $pdo->query($query);
+		WHERE status = '1'
+		;";	// status 1 = 'finalized'
+	$resultSet = $pdoQuoteDB->query($query);
 	if (empty($resultSet))
 	{
 		echo "<p>No finalized quotes at this time.</p>\n";
@@ -35,7 +66,7 @@ try {
 			echo "  <tr>\n";
 			
 			echo "    <td>${resultRow['quoteID']}</td>\n";
-			echo "    <td>${resultRow['creationDate']}</td>\n";
+			echo "    <td>${resultRow['creationDate']}</td>\n"; // FIXME does this exist?
 
 			// TODO use sales associate name instead (from foreign key match)
 			//echo "    <td>${resultRow['salesAssociateID']}</td>\n";
