@@ -39,20 +39,27 @@ try {
 	// if you store your credentials ($username and $password) in a file called 
 	// credentials.php)
 	$pdoQuoteDB = loginToDatabase($username, $username, $password);
+
+	// connect to external customer info legacy database
+	//$pdoCustDB = loginToDatabase(/* TODO how to connect? */);
+	echo "<p>Note to self: still need to connect to customer info DB</p>\n"; // FIXME temporary!!!
+
+	echo "<html>\n";
 	
 	// display all finalized quotes
 	$query = "SELECT * FROM Quote
 		WHERE status = '1'
 		;";	// status 1 = 'finalized'
 	$resultSet = $pdoQuoteDB->query($query);
-	if (empty($resultSet))
+	$resultRows = $resultSet->fetchAll(PDO::FETCH_ASSOC);
+	if (empty($resultRows))
 	{
 		echo "<p>No finalized quotes at this time.</p>\n";
 	}
 	else
 	{
-		echo "<table>\n";
-		foreach($resultSet as $resultRow)
+		echo "<table border='1'>\n";
+		foreach($resultRows as $resultRow)
 		{
 			// make an HTML table row for each finalized quote, with:
 			// 	quote ID
@@ -62,22 +69,38 @@ try {
 			// 	total price
 			// 	a "review quote" button (was called "sanction quote" in video but
 			// 			covered both sanctioning and editing)
+
 			
 			echo "  <tr>\n";
 			
 			echo "    <td>${resultRow['quoteID']}</td>\n";
-			echo "    <td>${resultRow['creationDate']}</td>\n"; // FIXME does this exist?
 
-			// TODO use sales associate name instead (from foreign key match)
-			//echo "    <td>${resultRow['salesAssociateID']}</td>\n";
-			echo "    <td>sales associate name placeholder</td>\n";
+			//echo "    <td>${resultRow['creationDate']}</td>\n"; // FIXME does this exist?
+
+			// Find name of matching sales associate
+			$query = "SELECT name FROM SalesAssoc
+				  WHERE salesAID = ${resultRow['salesAID']}
+				  ;";
+			$namesResultSet = $pdoQuoteDB->query($query);
+			$namesRow = $namesResultSet->fetch(PDO::FETCH_ASSOC);
+			echo "    <td>${namesRow['name']}</td>\n";
 
 			// TODO use customer name instead (from querying customer legacy DB?)
 			//echo "    <td>${resultRow['customerEmailAddress']}</td>\n";
 			echo "    <td>customer name placeholder</td>\n";
 
-			// TODO sum up all line item prices
-			echo "    <td>total price placeholder</td>\n";
+			// Sum up all line items for this quote and display the total price
+			$query = "SELECT price FROM LineItem
+				  WHERE quoteID = ${resultRow['quoteID']}
+				  ;";
+			$pricesResultSet = $pdoQuoteDB->query($query);
+			$pricesRows = $pricesResultSet->fetchAll(PDO::FETCH_ASSOC);
+			$totalPrice = 0;
+			foreach ($pricesRows as $pricesRow)
+			{
+				$totalPrice += $pricesRow['price'];
+			}
+			echo "    <td>$$totalPrice</td>\n";
 
 			// TODO make this button
 			echo "    <td>'review quote' button placeholder</td>\n";
@@ -99,6 +122,8 @@ try {
 	//	sanctioned)
 	//
 	// upon sanctioning, quote is emailed to customer with all data except secret notes
+	
+	echo "</html>\n";
 }
 catch (PDOexception $e) {
 	echo "Connection to database failed: " . $e->getMessage();
