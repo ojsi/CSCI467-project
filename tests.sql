@@ -6,7 +6,7 @@ INSERT INTO Quote (salesAID,status,procDateTime,commission,sNotes,customerID,cus
 INSERT INTO Quote (salesAID,status,procDateTime,commission,sNotes,customerID,cusContact) VALUES(1,0,CURRENT_TIME,4.20,'Cool fun secret note!',23,'test@email.com');
 INSERT INTO Quote (salesAID,status,procDateTime,commission,sNotes,customerID,cusContact) VALUES(2,1,CURRENT_TIME,333.333,'Another secret note. Give this person no discounts',1,'mail@mail.net');
 INSERT INTO Quote (salesAID,status,procDateTime,commission,sNotes,customerID,cusContact) VALUES(1,2,CURRENT_TIME,2,'Hi',2,'2@2.org');
-
+INSERT INTO Quote (salesAID,status,procDateTime,commission,sNotes,customerID,cusContact) VALUES(1,2,CURRENT_TIME,3,'Hi',3,'3@3.gov');
 
 INSERT INTO LineItem VALUES(1,1,'This is a Line Item.',45.45);
 INSERT INTO LineItem (quoteID,description,price) VALUES(2,'Line Item 2',5000.00);
