@@ -5,32 +5,7 @@
  */
 
 include("credentials.php");	// Store your $username and $password in this file
-
-
-/**
- * This function connects to the specified database and returns the PDO
- * object for that connection.
- *
- * This function is NOT exception-safe.
- *
- * @param dbname the name of the database
- * @param name the name of the user to login to
- * @param passwd the password for the user
- *
- * @return the PDO object for the established connection (might throw
- * exception!)
- */
-function loginToDatabase($dbname, $name, $passwd)
-{
-	// Connect to the mariadb server like normal
-	$dsn = "mysql:host=courses;dbname=" . $dbname;
-	$pdo = new PDO($dsn, $name, $passwd); //make new pdo object
-
-	// Set error mode
-	$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
-	return $pdo;    //return the pdo object that was created
-}
+include("dbLoginFunc.php");
 
 
 try {
@@ -38,13 +13,17 @@ try {
 	// (NOTE these parameters are correct if the DB exists in your NIU MariaDB account, and
 	// if you store your credentials ($username and $password) in a file called 
 	// credentials.php)
-	$pdoQuoteDB = loginToDatabase($username, $username, $password);
+	$pdoQuoteDB = loginToDatabase("courses", $username, $username, $password);
 
 	// connect to external customer info legacy database
-	//$pdoCustDB = loginToDatabase(/* TODO how to connect? */);
-	echo "<p>Note to self: still need to connect to customer info DB</p>\n"; // FIXME temporary!!!
+	$pdoCustDB = loginToDatabase("blitz.cs.niu.edu", "csci467", "student", "student");
 
 	echo "<html>\n";
+	echo "<head>\n";
+	echo "<title>Finalized Quote Interface</title>\n";
+	echo "</head>\n";
+
+	echo "<h1>Finalized Quote Interface</h1>\n";
 	
 	// display all finalized quotes
 	$query = "SELECT * FROM Quote
@@ -58,7 +37,7 @@ try {
 	}
 	else
 	{
-		echo "<table border='1'>\n";
+		echo "<table border='1' cellpadding=5>\n";
 		foreach($resultRows as $resultRow)
 		{
 			// make an HTML table row for each finalized quote, with:
@@ -70,24 +49,28 @@ try {
 			// 	a "review quote" button (was called "sanction quote" in video but
 			// 			covered both sanctioning and editing)
 
-			
+
 			echo "  <tr>\n";
 			
 			echo "    <td>${resultRow['quoteID']}</td>\n";
 
 			//echo "    <td>${resultRow['creationDate']}</td>\n"; // FIXME does this exist?
 
-			// Find name of matching sales associate
+			// Get name of sales associate
 			$query = "SELECT name FROM SalesAssoc
 				  WHERE salesAID = ${resultRow['salesAID']}
 				  ;";
-			$namesResultSet = $pdoQuoteDB->query($query);
-			$namesRow = $namesResultSet->fetch(PDO::FETCH_ASSOC);
-			echo "    <td>${namesRow['name']}</td>\n";
+			$saNamesResultSet = $pdoQuoteDB->query($query);
+			$saNamesRow = $saNamesResultSet->fetch(PDO::FETCH_ASSOC);
+			echo "    <td>${saNamesRow['name']}</td>\n";
 
-			// TODO use customer name instead (from querying customer legacy DB?)
-			//echo "    <td>${resultRow['customerEmailAddress']}</td>\n";
-			echo "    <td>customer name placeholder</td>\n";
+			// Get name of customer
+			$query = "SELECT name FROM customers
+				  WHERE id = ${resultRow['customerID']}
+				  ;";
+			$custNamesResultSet = $pdoCustDB->query($query);
+			$custNamesRow = $custNamesResultSet->fetch(PDO::FETCH_ASSOC);
+			echo "    <td>${custNamesRow['name']}</td>\n";
 
 			// Sum up all line items for this quote and display the total price
 			$query = "SELECT price FROM LineItem
@@ -98,30 +81,23 @@ try {
 			$totalPrice = 0;
 			foreach ($pricesRows as $pricesRow)
 			{
-				$totalPrice += $pricesRow['price'];
+				echo "<td>price ${pricesRow['price']}</td>\n";
+				$totalPrice += $pricesRow['price'];	// FIXME not working
 			}
 			echo "    <td>$$totalPrice</td>\n";
 
-			// TODO make this button
-			echo "    <td>'review quote' button placeholder</td>\n";
+			// Button to review this row's quote for editing and/or sanctioning
+			echo "    <td>\n";
+			echo "      <form action='./editFinalized.php' method='GET'>\n";
+			echo "        <input type='hidden' name='quoteID' value='${resultRow['quoteID']}'/>\n";
+			echo "        <input type='submit' value='review quote' id='review_quote'/>\n";
+			echo "      </form>\n";
+			echo "    </td>\n";
 
 			echo "  </tr>\n";
 		}
 		echo "</table>\n";
 	}
-
-	// each quote can be clicked, bringing up edit menu. Within edit menu:
-	//
-	// 	line items can be added, edited, removed, or have their price altered
-	//
-	//	discounts can be applied as either a percent or amount
-	//
-	//	secret notes can be edited
-	//
-	//	when done, can either leave unresolved or sanction (disappear from list once
-	//	sanctioned)
-	//
-	// upon sanctioning, quote is emailed to customer with all data except secret notes
 	
 	echo "</html>\n";
 }
