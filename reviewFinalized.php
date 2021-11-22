@@ -257,16 +257,16 @@ try {
 		//
 		// upon sanctioning, quote is emailed to customer with all data except secret notes
 
-		// button to return to interface main page
-		echo "<form action='interface2.php'>\n";
-		echo "  <input type='submit' value='Return to Interface 2'>\n";
+		// button to sanction quote
+		echo "<form action='sanctionQuote.php' method='POST'>\n";
+		echo "  <input type='hidden' name='quoteID' value='${_GET['quoteID']}'/>\n";
+		echo "  <input type='submit' id='sanctionQuote' value='Sanction Quote'>\n";
 		echo "</form>\n";
 
-		// button to sanction quote TODO
-//		echo "<form action='interface2.php'>\n";
-//		echo "  <input type='submit' value='Return to Interface 2'>\n";
-//		echo "</form>\n";
-		echo "<h4><i>TODO: button to sanction quote!!</i></h4>\n";
+		// button to return to interface main page
+		echo "<form action='interface2.php'>\n";
+		echo "  <input type='submit' value='Return without Sanctioning'>\n";
+		echo "</form>\n";
 
 		echo "</html>\n";
 	}
