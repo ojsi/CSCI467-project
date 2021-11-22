@@ -81,14 +81,13 @@ try {
 			$totalPrice = 0;
 			foreach ($pricesRows as $pricesRow)
 			{
-				echo "<td>price ${pricesRow['price']}</td>\n";
-				$totalPrice += $pricesRow['price'];	// FIXME not working
+				$totalPrice += $pricesRow['price'];
 			}
 			echo "    <td>$$totalPrice</td>\n";
 
 			// Button to review this row's quote for editing and/or sanctioning
 			echo "    <td>\n";
-			echo "      <form action='./editFinalized.php' method='GET'>\n";
+			echo "      <form action='./reviewFinalized.php' method='GET'>\n";
 			echo "        <input type='hidden' name='quoteID' value='${resultRow['quoteID']}'/>\n";
 			echo "        <input type='submit' value='review quote' id='review_quote'/>\n";
 			echo "      </form>\n";
