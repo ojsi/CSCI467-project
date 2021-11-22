@@ -55,7 +55,7 @@
 
 <!-- JavaScript for selection of the customer-->
 <script>
-    var previousrow;
+     var previousrow;
 
     function addRowHandlers() {
         //Get rows in table
