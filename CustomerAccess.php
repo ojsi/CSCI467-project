@@ -1,4 +1,13 @@
+<?php
+include("credentials.php");	// Store your $username and $password in this file
+include("dbLoginFunc.php");
+include("login.php")
+?>
+
+
 <!DOCTYPE html>
+
+
 <html>
 
 <body>
@@ -9,11 +18,11 @@
     </div>
     <!-- Return to quote tracking button -->
     <div class="p-1 btn-group d-flex">
-        <a href="tracking.php" class="btn btn-danger" role="button" target="_self">Back To Quote</a>
+        <a href="quotegeneration.php" class="btn btn-danger" role="button" target="_self">Back To Quote</a>
     </div>
 
     <!-- Input to send customer name back to the quote for processing -->
-    <form action="tracking.php" class="m-2 p-2" method="post">
+    <form action="quotegeneration.php" class="m-2 p-2" method="post">
         <div class="form-row input-group">
             <input onkeydown="event.preventDefault()" type="text" class="form-control" id="selectCust" name="selectCust" required placeholder="Click On Table To Select Customer">
             <input class="btn btn-success" type="submit">
@@ -21,7 +30,7 @@
     </form>
 
     <!-- Search the customer list for a customer name -->
-    <form action="CustomerList.php" class=" m-2 p-2" method="post">
+    <form action="CustomerAccess.php" class=" m-2 p-2" method="post">
         <div class="form-row input-group">
             <input type="text" class="form-control" placeholder="Search Customers" name="search">
             <button class="btn btn-primary" type="submit" class="">Search</button>
@@ -30,11 +39,12 @@
 
     <!-- Proccess Search for Customer Name-->
     <?php
+    $legacyPDO = login_to_database(args);
     if (isset($_POST["search"])) {
         $searchString = $_POST["search"];
         //Search for any paremeter such as the name, id, city, street or contact
         $customerSearch = $legacyPDO->prepare(
-            "SELECT name, contact FROM customers 
+        "SELECT name, contact FROM customers 
         WHERE (name LIKE CONCAT('%', :string, '%'))
         OR (id LIKE CONCAT('%', :string, '%'))
         OR (city LIKE CONCAT('%', :string, '%'))
