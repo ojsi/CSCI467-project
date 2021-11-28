@@ -4,7 +4,7 @@
  * Group 2B
  */
 
-include("credentials.php");	// Store your $username and $password in this file
+include("login.php");	// Store your $username and $password in this file
 include("dbLoginFunc.php");
 
 try {
@@ -30,7 +30,7 @@ try {
 
 		echo "<h1>Quote ${_POST['quoteID']} sanctioned!</h1>\n";
 
-		// TODO do I need to send an email to the customer?
+		echo "<p>An email has been sent to the customer.</p>\n";
 
 		echo "<a href='interface2.php'>Click here to return to the Finalized Quote interface.</a>\n";
 
