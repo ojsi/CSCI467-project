@@ -1,4 +1,5 @@
-<!--
+<html>
+    <!--
     Wesley Kwiecinski - Z1896564, Group 2B
     Quote System
     CSCI 467
@@ -8,9 +9,8 @@
     discount, computers the final price, then sends the purchase order
     to the purchase order processing system
     It grabs the response and updates the database.
--->
+    -->
 
-<html>
     <head><title>Plant Repair Services</title></head>
     <div class="header">
         <h1>Ordering System</h1>
@@ -30,10 +30,10 @@
 <?php
 //Reusable functions (drawing tables, loging into database, etc)
 include("./common_functions.php");
+include("./login.php"); //central database login information
 
 //Log into the local database
-//TODO: Update to use centralized database
-$pdo = login_to_database("courses", "z1896564", "z1896564", "2000Aug17");
+$pdo = login_to_database("courses", $username, $username, $password);
 //Log into legacy database - this is for customer information
 //need to grab customer name
 $legacy = login_to_database("blitz.cs.niu.edu","csci467","student","student");
@@ -82,9 +82,5 @@ if(!empty($rows))
 }
 
 ?>
-
-<script>
-
-</script>
 
 </html>
