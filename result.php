@@ -61,6 +61,7 @@ if(json_last_error() === JSON_ERROR_NONE)
         $rs = $pdo->prepare($update_query, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
         $rs->execute();
         echo "Order was processed.";
+        echo "<script>alert(\"Email has been sent to $res->name\")</script>";
     }
 } else 
 {
