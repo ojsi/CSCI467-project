@@ -15,7 +15,7 @@
     </div>
 
     <!-- Input to send customer name back to the quote for processing -->
-    <form action="quotegeneration.php" class="m-2 p-2" method="post">
+    <form action="newerquotegen.php" class="m-2 p-2" method="post">
         <div class="form-row input-group">
             <input onkeydown="event.preventDefault()" type="text" class="form-control" id="selectCust" name="selectCust" required placeholder="Click On Table To Select Customer">
             <input class="btn btn-success" type="submit">
@@ -40,7 +40,7 @@
         $searchString = $_POST["search"];
         //Search for any paremeter such as the name, id, city, street or contact
         $customerSearch = $legacyPDO->prepare(
-        "SELECT name, contact FROM customers 
+        "SELECT name, contact, id FROM customers 
         WHERE (name LIKE CONCAT('%', :string, '%'))
         OR (id LIKE CONCAT('%', :string, '%'))
         OR (city LIKE CONCAT('%', :string, '%'))
@@ -60,11 +60,12 @@
         // output data of each row
         echo "<table>";
         echo "<table border='0' cellpadding='5'>";
-        echo "<form method='POST'>";
+        echo "<form method='POST' action='newerquotegen.php'>";
         foreach($rows as $rows) {
             echo "  <tr>\n";
             echo "    <td>${rows['contact']}</td>";
             echo "    <td>${rows['name']}</td>";
+            echo "      <td><input type='radio' name='custSelect' value='${rows['id']}'/></td>";
             echo "</tr>";
         }
         echo "    <input type='submit' value='Create Quote' id='create_quote'/>";
@@ -88,7 +89,7 @@
             var currentRow = table[0].rows[i];
             var createClickHandler =
                 function(row) {
-                    return function() 
+                    return function() {
                         if (previousrow != undefined) {
                             previousrow.setAttribute("style", "");
                         }
