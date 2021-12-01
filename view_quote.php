@@ -35,5 +35,5 @@ catch (PDOexception $e) {
 
 ?>
 <form action="admin_interface.php"><input type=submit class=button name=return value="Back to Admin Interface"></form> </div>
-
+</pre></body></html>
 </body></html>

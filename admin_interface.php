@@ -63,34 +63,40 @@ try {
 			echo "</form>";
 			
 			//delete sales assoc
-			echo "<form action='./edit_assoc.php' method='GET'>";
+			echo "<form action='./edit_assoc.php' method='POST'>";
 			echo "<input type='hidden' name='delIDnum' value='${rows['salesAID']}'/>";
 			echo "<td><input type='submit' value='Delete' id='delete_sales'/></td>";
-		}
+
+			if(isset($_POST['name'])) 
+			{
+				$delquery = "DELETE FROM SalesAssoc WHERE salesAID = :delIDnum";
+				$removeSA = $pdoQuoteDB->prepare($query);
+				$removeSA->execute(array(':delIDnum' => $_POST['salesAID']));
+				unset($_POST['name']);
+			}
+		}	
 	}
 	echo "</table>";	
 
 	//add associate
 	echo "<h3>Add New Sales Associate</h3>\n";
-	echo "<form method='POST'>";
+	echo "<form action='./admin_interface.php' method='POST'>";
 	echo "<label for='name'>Name: </label>";
 	echo "<input type='text' id='name' name='name'/> &nbsp";
 	echo "<label for='passwd'>Create Password: </label>";
 	echo "<input type='text' id='passwd' name='passwd''/> &nbsp";
-	echo "<input type='submit' class ='button' onclick='location.href = 'admin_interface.php'' value='Add New Associate'/>";
+	echo "<input type='submit' class ='button' value='Add New Associate'/>";
 	echo "</form>";
 
 	//add new user
-	if(isset($_GET['name']))
+	if(isset($_GET['name'])) 
 	{
 		$query = "INSERT INTO SalesAssoc (name,passwd) VALUES(:name, :pass);";
 		$addNewSA = $pdoQuoteDB->prepare($query);
 		$addNewSA->execute(array(':name' => $_POST['name'], ':pass' => $_POST['passwd']));
-
 		unset($_POST['name']);
 	}
 
-	
 }
 catch(PDOexception $e) {
 	echo "Connection to database failed: " . $e->getMessage();

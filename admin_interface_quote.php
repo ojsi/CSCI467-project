@@ -38,7 +38,8 @@ try {
 	$rs = $pdo->query("SELECT DISTINCT quoteID,status,procDateTime,sNotes FROM Quote ;");
 	if(!$rs){echo"ERROR in Sales Associate Database"; die();}
 	$rows = $rs->fetchALL(PDO::FETCH_ASSOC);
-	
+
+	//add sort by criteria
 
 	//show table
 	echo " <table border='0' cellpadding='10'><tr><th> Quote ID </th><th> Status </th><th> Date Created </th><th> Notes </th>";
