@@ -1,8 +1,28 @@
-<html><head>
-	<title>Admin Interface</title>
-</head>
+<!-- visit page at http://students.cs.niu.edu/~z1842318/admin_interface.php -->
 
+<html><head>
+	<title>Admin Interface - Viewing Sales Associates</title>
+</head>
+<style>
+  .button {
+width: 200px;
+margin: 0 auto;
+display: inline;}
+
+    .action_btn {
+width: 200px;
+margin: 0 auto;
+display: inline;}
+</style>
 <body>
+
+<!-- vswitch between viewing sales associates and quotes -->	
+<div class="button">
+	<div class="action_btn">
+	<button name="submit" class="action_btn" type="submit" value="submit" onclick="location.href = 'admin_interface.php';">Show Sales Associates</button>
+		<button name="submit" class="action_btn" type="submit" value="submit" onclick="location.href = 'admin_interface_quote.php';">Show Quotes</button>
+   		<p id="saved"></p>
+</div>
 <?php
 	
 //include login
@@ -15,11 +35,6 @@ try {
 	$pdo = new PDO($dsn, $username, $password);
 	$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-	//sales assoc or quote - default to sales assoc
-	echo "<form method='POST'>";
-	echo "<input type=radio name='showTable' checked='checked' value='salesAssoc'>Sales Associates";
-	echo "<input type=radio name='showTable' value='quote'>Quotes";
-	echo "</form>";
 
 	//get sales associates from DB
 	$rs = $pdo->query("SELECT DISTINCT salesAID,name,accumComm,address FROM SalesAssoc ;");
@@ -42,25 +57,38 @@ try {
 			echo "    <td>${rows['address']}</td>";
 
 			//edit button
-			echo "<form action='./edit_assoc.php' method='POST'>";
-			echo "<input type='hidden' name='salesID' value='${rows['salesAID']}'/>";
-			echo "<td><input type='submit' value='Edit' id='edit'/></td>";
+			echo "<form action='./edit_assoc.php' method='GET'>";
+			echo "<input type='hidden' name='IDnum' value='${rows['salesAID']}'/>";
+			echo "<td><input type='submit' value='Edit' id='edit_sales'/></td>";
 			echo "</form>";
 			
 			//delete sales assoc
-			echo "<form action='./edit_assoc.php' method='POST'>";
-			echo "<input type='hidden' name='IDnum' value='${rows['salesAID']}'/>";
-			echo "<td><input type='submit' value='Delete' id='delete'/></td>";
+			echo "<form action='./edit_assoc.php' method='GET'>";
+			echo "<input type='hidden' name='delIDnum' value='${rows['salesAID']}'/>";
+			echo "<td><input type='submit' value='Delete' id='delete_sales'/></td>";
 		}
 	}
-
-
-	
 	echo "</table>";	
 
-	//quote table
+	//add associate
+	echo "<h3>Add New Sales Associate</h3>\n";
+	echo "<form method='POST'>";
+	echo "<label for='name'>Name: </label>";
+	echo "<input type='text' id='name' name='name'/> &nbsp";
+	echo "<label for='passwd'>Create Password: </label>";
+	echo "<input type='text' id='passwd' name='passwd''/> &nbsp";
+	echo "<input type='submit' class ='button' onclick='location.href = 'admin_interface.php'' value='Add New Associate'/>";
+	echo "</form>";
 
+	//add new user
+	if(isset($_GET['name']))
+	{
+		$query = "INSERT INTO SalesAssoc (name,passwd) VALUES(:name, :pass);";
+		$addNewSA = $pdoQuoteDB->prepare($query);
+		$addNewSA->execute(array(':name' => $_POST['name'], ':pass' => $_POST['passwd']));
 
+		unset($_POST['name']);
+	}
 
 	
 }

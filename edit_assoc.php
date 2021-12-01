@@ -14,18 +14,42 @@ try {
     $pdo = new PDO($dsn, $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         
-	//get user ID of new user, save as userNUM
-	$rs = $pdo->prepare("SELECT DISTINCT name,passwd,accumComm,address FROM SalesAssoc WHERE salesAID = :ID;");
-	$rs->execute(array(':ID'=>$_POST['IDnum']));
-	$row = $rs->fetch(PDO::FETCH_BOTH);
-	$salesAID = $row[0];
-
-    echo "<h3>Sales Associate ${row['salesAID']}</h3>\n";
-    echo "<h3>${row['name']}</h3>";
-
 	
+	// get row of requested quote
+	$query = "SELECT * FROM SalesAssoc WHERE salesAID = ?;";
+	$rs = $pdo->prepare($query);
+	$rs->execute(array($_GET['IDnum']));
+	$rows = $rs->fetch(PDO::FETCH_ASSOC);
 	
+    echo "<h3>Updating Information for Sales Associate: ${rows['salesAID']}, ${rows['name']}</h3>\n";
 
+	//show and update name
+	echo "<form method='GET'>";
+	echo "<label for='name'>Associate Name: </label>";
+	echo "<input type='text' id='name' name='name' value='${rows['name']}'/> &nbsp";
+	echo "<input type='submit' class ='button'  value='Update'/>";
+	echo "</form>";
+
+	//show and update password
+	echo "<form method='GET'>";
+	echo "<label for='passwd'>Associate Password: </label>";
+	echo "<input type='text' id='passwd' name='passwd' value='${rows['passwd']}'/> &nbsp";
+	echo "<input type='submit' class ='button'  value='Update'/>";
+	echo "</form>";
+	
+	//show and update accumulated commission
+	echo "<form method='GET'>";
+	echo "<label for='passwd'>Accumulated Commission: </label>";
+	echo "<input type='text' id='comm' name='comm' value='${rows['accumComm']}'/> &nbsp";
+	echo "<input type='submit' class ='button'  value='Update'/>";
+	echo "</form>";
+
+	//show and update address
+	echo "<form method='GET'>";
+	echo "<label for='passwd'>Associate Address: </label>";
+	echo "<input type='text' id='addr' name='addr' value='${rows['address']}'/> &nbsp";
+	echo "<input type='submit' class ='button'  value='Update'/>";
+	echo "</form>";
 
 
 }
@@ -36,7 +60,7 @@ catch (PDOexception $e) {
 
 ?>
 <form action="admin_interface.php"><input type=submit class=button name=return value="Back to Admin Interface"></form> </div>
-</pre></body></html>
+
 </body></html>
 
 
