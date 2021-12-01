@@ -1,10 +1,3 @@
-<?php
-include("credentials.php");	// Store your $username and $password in this file
-include("dbLoginFunc.php");
-include("login.php")
-?>
-
-
 <!DOCTYPE html>
 
 
@@ -39,7 +32,10 @@ include("login.php")
 
     <!-- Proccess Search for Customer Name-->
     <?php
-    $legacyPDO = login_to_database(args);
+    include("credentials.php");	// Store your $username and $password in this file
+    include("dbLoginFunc.php");
+    //$legacyPDO = loginToDatabase("courses", $username, $username, $password);
+    $legacyPDO = loginToDatabase("blitz.cs.niu.edu", "csci467", "student", "student");  
     if (isset($_POST["search"])) {
         $searchString = $_POST["search"];
         //Search for any paremeter such as the name, id, city, street or contact
@@ -53,12 +49,29 @@ include("login.php")
         );
         $customerSearch->execute(array(':string' => $searchString));
     } else {
-        $customerSearch = $legacyPDO->prepare("SELECT name, contact FROM customers");
+        $customerSearch = $legacyPDO->prepare("SELECT name, contact, id FROM customers");
         $customerSearch->execute();
     }
     //Display all results on the table
     $rows = $customerSearch->fetchAll(PDO::FETCH_ASSOC);
-    echo '<div class="row m-2 p-2">', tableHead($rows), tableBody($rows), "</div>";
+    if (empty($rows)) {
+        echo "None.";
+     } else {
+        // output data of each row
+        echo "<table>";
+        echo "<table border='0' cellpadding='5'>";
+        echo "<form method='POST'>";
+        foreach($rows as $rows) {
+            echo "  <tr>\n";
+            echo "    <td>${rows['contact']}</td>";
+            echo "    <td>${rows['name']}</td>";
+            echo "</tr>";
+        }
+        echo "    <input type='submit' value='Create Quote' id='create_quote'/>";
+        echo "  </form>";
+        echo "</table>";
+    }
+  
     ?>
 
 </body>
@@ -69,7 +82,7 @@ include("login.php")
 
     function addRowHandlers() {
         //Get rows in table
-        var table = document.getElementsByClassName("datatbl");
+        var table = document.getElementsByClassName("table");
         var rows = table[0].getElementsByTagName("tr");
         for (i = 0; i < rows.length; i++) {
             var currentRow = table[0].rows[i];
