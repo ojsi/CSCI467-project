@@ -19,15 +19,17 @@ display: inline;}
 <!-- vswitch between viewing sales associates and quotes -->	
 <div class="button">
 	<div class="action_btn">
-	<button name="submit" class="action_btn" type="submit" value="submit" onclick="location.href = 'admin_interface.php';">Show Sales Associates</button>
-		<button name="submit" class="action_btn" type="submit" value="submit" onclick="location.href = 'admin_interface_quote.php';">Show Quotes</button>
-   		<p id="saved"></p>
+	<button name="submission" class="action_btn" type="submit" value="4" onclick="location.href = 'admin_interface.php';">Show Sales Associates</button>
+		<button name="submission" class="action_btn" type="submit" value="4" onclick="location.href = 'admin_interface_quote.php';">Show Quotes</button>
+		   <p id="saved"></p>
+	<form>  
+        <input type='hidden' name='submission' value='4'>
+    </form>
 </div>
 <?php
 	
 //include login
 include("login.php");
-include("functions.php");
 
 try {
 	//connect to internal db

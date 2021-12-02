@@ -14,7 +14,7 @@ try {
     $pdo = new PDO($dsn, $username, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         
-	$rs = $pdo->prepare("SELECT DISTINCT name,passwd,accumComm,address FROM SalesAssoc WHERE quoteID = :ID;");
+	$rs = $pdo->prepare("SELECT DISTINCT name,passwd,accumComm,address FROM Quote WHERE quoteID = :ID;");
 	$rs->execute(array(':ID'=>$_GET['IDnum']));
 	$rows = $rs->fetch(PDO::FETCH_BOTH);
 
