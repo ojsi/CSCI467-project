@@ -34,7 +34,7 @@ include("./credentials.php");
 
 try {
 
-    echo "<form action=\"http://students.cs.niu.edu/~z1896564/Project2B_467_Ordering_System/result.php\" method=\"GET\" >";
+    echo "<form action=\"./result.php\" method=\"GET\" >";
 
     //Log into the local database
     $pdo = login_to_database("courses", $username, $username, $password);
