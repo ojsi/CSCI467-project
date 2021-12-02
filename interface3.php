@@ -57,7 +57,7 @@ try {
         echo "<table cellspacing=1 border=1 >"; //table definition
         foreach($rows as $row)
         {
-            echo "<form action=\"http://students.cs.niu.edu/~z1896564/Project2B_467_Ordering_System/order_window.php\" method=\"GET\" >";
+            echo "<form action=\"./order_window.php\" method=\"GET\" >";
             $qid = $row["quoteID"];
             //get customer info from legacy database based on customerID in quote
             $legacy_query = "SELECT name, contact FROM customers WHERE id={$row["customerID"]};";
@@ -68,7 +68,7 @@ try {
             echo "<tr>";
             echo "<td>" . $row["quoteID"] . " (" . $row["procDateTime"] . "): " . $row["name"] . " - " . $results[0]["name"] . "</td>";
             echo "<td>" . "$" . $row["commission"] .  "</td>";
-            echo "<td>" . "<input type=\"submit\" value=\"Send Purchase Order\" method=\"GET\" action=\"order_window.php\" />";
+            echo "<td>" . "<input type=\"submit\" value=\"Send Purchase Order\" method=\"GET\" action=\"./order_window.php\" />";
             echo "</tr>";
             echo "<input type=\"hidden\" name=\"quoteID\" value=$qid />";
             echo "</br>";
