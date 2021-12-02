@@ -30,7 +30,7 @@
 <?php
 //Reusable functions (drawing tables, loging into database, etc)
 include("./common_functions.php");
-include("./login.php"); //central database login information
+include("./credentials.php"); //central database login information
 
 try {
 
