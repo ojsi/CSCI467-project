@@ -16,7 +16,7 @@
 //login to databases
 //Reusable functions (drawing tables, loging into database, etc)
 include("./common_functions.php");
-include("./login.php");
+include("./credentials.php");
 
 //Log into the local database
 $pdo = login_to_database("courses", $username, $username, $password);
