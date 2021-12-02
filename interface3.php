@@ -42,7 +42,7 @@ try {
 
     //Create a query that gets all quotes that have status value 2 "sanctioned"
     //Dont need to prepare since we don't take in user input
-    $sql_query = "SELECT quoteID, procDateTime, name, commission, customerID FROM Quote,SalesAssoc WHERE status=2 AND Quote.salesAID=SalesAssoc.salesAID GROUP BY quoteID ORDER BY quoteID;";
+    $sql_query = "SELECT quoteID, procDateTime, name, customerID FROM Quote,SalesAssoc WHERE status=2 AND Quote.salesAID=SalesAssoc.salesAID GROUP BY quoteID ORDER BY quoteID;";
     $rs = $pdo->prepare($sql_query, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
     $rs->execute();
     $rows = $rs->fetchAll(PDO::FETCH_ASSOC);
@@ -67,7 +67,7 @@ try {
             //Need to get the customer name from the legacy database
             echo "<tr>";
             echo "<td>" . $row["quoteID"] . " (" . $row["procDateTime"] . "): " . $row["name"] . " - " . $results[0]["name"] . "</td>";
-            echo "<td>" . "$" . $row["commission"] .  "</td>";
+            //echo "<td>" . "$" . $row["commission"] .  "</td>";
             echo "<td>" . "<input type=\"submit\" value=\"Send Purchase Order\" method=\"GET\" action=\"./order_window.php\" />";
             echo "</tr>";
             echo "<input type=\"hidden\" name=\"quoteID\" value=$qid />";
