@@ -29,7 +29,7 @@ display: inline;}
 <?php
 	
 //include login
-include("login.php");
+include("credentials.php");	
 
 try {
 	//connect to internal db
@@ -40,9 +40,9 @@ try {
 	//add new user
 	if(isset($_POST['add'])) 
 	{
-		$query = "INSERT INTO SalesAssoc (name,passwd) VALUES(:name, :pass);";
+		$query = "INSERT INTO SalesAssoc (name,passwd,accumComm,address) VALUES(:name, :pass, :comm, :addr);";
 		$addNewSA = $pdo->prepare($query);
-		$return = $addNewSA->execute(array(':name' => $_POST['name'], ':pass' => $_POST['passwd']));
+		$return = $addNewSA->execute(array(':name' => $_POST['name'], ':pass' => $_POST['passwd'], ':comm' => $_POST['comm'], ':addr' => $_POST['addr']));
 	}
 
 	//kill
@@ -97,6 +97,8 @@ try {
 	echo "<label for='passwd'>Create Password: </label>";
 	echo "<input type='text' id='passwd' name='passwd''/> &nbsp";
 
+	echo "<input type='hidden' id='comm' name='comm' value='00.00'>"; 
+	echo "<input type='hidden' id='addr' name='addr' value='None Given'>"; 
 	echo "<input type='submit' name='add' class ='button' value='Add New Associate'/>";
 	echo "<input type='hidden' name='submit' value='0'>"; 
 	echo "</form>";

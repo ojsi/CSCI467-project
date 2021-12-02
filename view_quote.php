@@ -5,8 +5,8 @@
 <body>
 <?php
 
-include("login.php");
-include("functions.php");	
+include("credentials.php");
+include("common_functions.php");	
 
 try {
 

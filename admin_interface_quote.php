@@ -30,7 +30,7 @@ display: inline;}
 error_reporting(E_ERROR | E_WARNING | E_PARSE);
 	
 //include login
-include("login.php");
+include("credentials.php");
 
 try {
 	/* DATA BASE CONNCETIONS */
