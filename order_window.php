@@ -68,7 +68,7 @@ try {
 
     //Make table of line items
     echo "<h3><b>Line Items:</b></h3></br>";
-    echo "<table cellspacing=5 border=1>";
+    echo "<table cellspacing=5 cellpadding=10 border=1>";
     $cost = 0;
     foreach($line_items as $item)
     {
