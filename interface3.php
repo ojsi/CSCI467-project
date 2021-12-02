@@ -54,7 +54,7 @@ try {
         echo "Sanctioned Quotes";
         echo "<div class=\"results\">"; //for styling
         $count = 0;
-        echo "<table cellspacing=1 border=1 >"; //table definition
+        echo "<table cellspacing=10 border=1 >"; //table definition
         foreach($rows as $row)
         {
             echo "<form action=\"./order_window.php\" method=\"GET\" >";
