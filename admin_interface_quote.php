@@ -27,7 +27,7 @@ display: inline;}
 
 
 <?php
-//error_reporting(E_ERROR | E_WARNING | E_PARSE);
+error_reporting(E_ERROR | E_WARNING | E_PARSE);
 	
 //include login
 include("login.php");
@@ -59,42 +59,7 @@ try {
 	echo "<input type='hidden' name='status' value='status'>"; 
 	echo "<input type='hidden' name='custName' value='custName'>"; 
     echo "</form>";
-    
-    /* 
-   //date - lower bound
-    echo "<form action='./admin_interface_quote.php' method='POST'>";
-
-	echo "<label for='dateL'> Sort by date from </label>";
-	echo "&nbsp<select name='dateL' value='procDateTime'</option>&nbsp";
-	$rs4 = $pdo->query("SELECT procDateTime FROM Quote ORDER BY procDateTime;");
-	if(!$rs4){echo"ERROR in Database"; die();}
-	$rows4 = $rs4->fetchALL(PDO::FETCH_ASSOC);
-	foreach ($rows4 as $rows4) {
-		echo "<option value=$rows4[procDateTime]>$rows4[procDateTime]</option>"; 
-	}
-	echo "</select>";
-	echo "&nbsp";
-
-    //date - upperbound	
-	echo "<label for='dateU'>to</label>";
-	echo "&nbsp<select name='dateU' value='procDateTime'</option>&nbsp"; 
-	$rs5 = $pdo->query("SELECT procDateTime FROM Quote ORDER BY procDateTime;");
-	if(!$rs5){echo"ERROR in Database"; die();}
-	$rows5 = $rs5->fetchALL(PDO::FETCH_ASSOC);
-	foreach ($rows5 as $rows5) {
-		echo "<option value=$rows5[procDateTime]>$rows5[procDateTime]</option>"; 
-	}
-	echo "</select>";
-	echo "&nbsp";
-	echo "<input type='submit' class ='button' value='Sort By Parameters'/>";
-    echo "<input type='hidden' name='submission' value='3'>";
-    echo "<input type='hidden' name='salesA' value='salesA'>"; 
-	echo "<input type='hidden' name='status' value='status'>"; 
-	echo "<input type='hidden' name='custName' value='custName'>"; 
-	echo "</form>";
-    */
-
-    
+     
     //sales associates
 	echo "<form action='./admin_interface_quote.php' method='POST'>";
 	//get sales associates from DB for sort
@@ -177,12 +142,11 @@ try {
 		$rows = $rs->fetchALL(PDO::FETCH_ASSOC);
 	
 		//show table
-		echo " <table border='0' cellpadding='10'><tr><th> Quote ID </th><th> Status </th><th> Date Created </th><th> SA/ID </th><th> C/ID </th><th> Notes </th>";
-
 		if (empty($rows)) {
 			echo "None.";
 		} else {
 			// output data of each row
+			echo " <table border='0' cellpadding='10'><tr><th> Quote ID </th><th> Status </th><th> Date Created </th><th> SA/ID </th><th> C/ID </th><th> Notes </th>";
 			foreach($rows as $rows) {
                 echo "  <tr>\n";
 				echo "    <td>${rows['quoteID']}</td>";
@@ -208,12 +172,12 @@ try {
 		$rows = $rs->fetchALL(PDO::FETCH_ASSOC);
 	
 		//show table
-		echo " <table border='0' cellpadding='10'><tr><th> Quote ID </th><th> Status </th><th> Date Created </th><th> SA/ID </th><th> C/ID </th><th> Notes </th>";
-
+		
 		if (empty($rows)) {
 			echo "None.";
 		} else {
 			// output data of each row
+			echo " <table border='0' cellpadding='10'><tr><th> Quote ID </th><th> Status </th><th> Date Created </th><th> SA/ID </th><th> C/ID </th><th> Notes </th>";
 			foreach($rows as $rows) {
                 echo "  <tr>\n";
 				echo "    <td>${rows['quoteID']}</td>";
@@ -239,11 +203,11 @@ try {
 		$rows = $rs->fetchALL(PDO::FETCH_ASSOC);
 	
 		//show table
-		echo " <table border='0' cellpadding='10'><tr><th> Quote ID </th><th> Status </th><th> Date Created </th><th> SA/ID </th><th> C/ID </th><th> Notes </th>";
-
+		
 		if (empty($rows)) {
 			echo "None.";
 		} else {
+			echo " <table border='0' cellpadding='10'><tr><th> Quote ID </th><th> Status </th><th> Date Created </th><th> SA/ID </th><th> C/ID </th><th> Notes </th>";
 			// output data of each row
 			foreach($rows as $rows) {
                 echo "  <tr>\n";
@@ -265,16 +229,21 @@ try {
 
     } elseif(($_POST['submission']) == '3') {
 
-        $dateLow=date('Y-M-D H:i:s',strtotime($_POST['dateL']));
-        $dateUp=date('Y-M-D H:i:s',strtotime($_POST['dateU']));
+        //$dateLow=date('Y-m-d H:i:s',strtotime($_POST['dateL']));
+		//$dateUp=date('Y-m-d H:i:s',strtotime($_POST['dateU']));
+		
+		//$dateLow = ($_POST['dateL']);
+		$dateLow = strtotime(($_POST['dateL']));
+		$dateUp = strtotime(($_POST['dateU']));
        
-        $rs = $pdo->query("SELECT * FROM Quote WHERE procDateTime BETWEEN convert(datetime,'$dateLow') AND convert(datetime,'$dateUp');");
+        $rs = $pdo->query("SELECT * FROM Quote WHERE UNIX_TIMESTAMP(procDateTime) BETWEEN $dateLow AND $dateUp");
         if(!$rs){echo"ERROR in Database"; die();}
-        $rows = $rs->fetchALL(PDO::FETCH_ASSOC);
+		$rows = $rs->fetchALL(PDO::FETCH_ASSOC);
 
         if (empty($rows)) {
             echo "None.";
           } else {
+			echo " <table border='0' cellpadding='10'><tr><th> Quote ID </th><th> Status </th><th> Date Created </th><th> SA/ID </th><th> C/ID </th><th> Notes </th>";
             // output data of each row
             foreach($rows as $rows) {
                 echo "  <tr>\n";
@@ -294,37 +263,6 @@ try {
             }
          }   
             
-
-    /*
-     $rs = $pdo->query("SELECT * FROM Quote WHERE procDateTime = $dateLow");
-     if(!$rs){echo"ERROR in Database"; die();}
-      $rows = $rs->fetchALL(PDO::FETCH_ASSOC);
-
-     //show table
-      echo " <table border='0' cellpadding='10'><tr><th> Quote ID </th><th> Status </th><th> Date Created </th><th> SA/ID </th><th> C/ID </th><th> Notes </th>";
-
-      if (empty($rows)) {
-        echo "None.";
-      } else {
-        // output data of each row
-        foreach($rows as $rows) {
-            echo "  <tr>\n";
-            echo "    <td>${rows['quoteID']}</td>";
-            echo "    <td>${rows['status']}</td>";
-            echo "    <td>${rows['procDateTime']}</td>";
-            echo "    <td>${rows['salesAID']}</td>";
-            echo "    <td>${rows['customerID']}</td>";
-            echo "    <td>${rows['sNotes']}</td>";
-
-            //edit button
-            echo "<form action='./view_quote.php' method='GET'>";
-            echo "<input type='hidden' name='IDnum' value='${rows['quoteID']}'/>";
-            echo "<td><input type='submit' value='View Quote' id='view'/></td>";
-            echo "</form>";
-    
-        }
-     }   
-    */
     } else {
 		// SHOW ALL QUOTES
 		//get quotes from DB
@@ -332,30 +270,28 @@ try {
 		if(!$rs){echo"ERROR in Sales Associate Database"; die();}
 		$rows = $rs->fetchALL(PDO::FETCH_ASSOC);
 
-		//show table
-		echo " <table border='0' cellpadding='10'><tr><th> Quote ID </th><th> Status </th><th> Date Created </th><th> SA/ID </th><th> C/ID </th><th> Notes </th>";
-
 		if (empty($rows)) {
-			echo "None.";
-		} else {
-			// output data of each row
-			foreach($rows as $rows) {
-				echo "  <tr>\n";
-				echo "    <td>${rows['quoteID']}</td>";
-				echo "    <td>${rows['status']}</td>";
-				echo "    <td>${rows['procDateTime']}</td>";
-				echo "    <td>${rows['salesAID']}</td>";
-				echo "    <td>${rows['customerID']}</td>";
-				echo "    <td>${rows['sNotes']}</td>";
-
-				//edit button
-				echo "<form action='./view_quote.php' method='GET'>";
-				echo "<input type='hidden' name='IDnum' value='${rows['quoteID']}'/>";
-				echo "<td><input type='submit' value='View Quote' id='view'/></td>";
-				echo "</form>";
-		
-			}
-		}
+            echo "None.";
+          } else {
+			echo " <table border='0' cellpadding='10'><tr><th> Quote ID </th><th> Status </th><th> Date Created </th><th> SA/ID </th><th> C/ID </th><th> Notes </th>";
+            // output data of each row
+            foreach($rows as $rows) {
+                echo "  <tr>\n";
+                echo "    <td>${rows['quoteID']}</td>";
+                echo "    <td>${rows['status']}</td>";
+                echo "    <td>${rows['procDateTime']}</td>";
+                echo "    <td>${rows['salesAID']}</td>";
+                echo "    <td>${rows['customerID']}</td>";
+                echo "    <td>${rows['sNotes']}</td>";
+    
+                //edit button
+                echo "<form action='./view_quote.php' method='GET'>";
+                echo "<input type='hidden' name='IDnum' value='${rows['quoteID']}'/>";
+                echo "<td><input type='submit' value='View Quote' id='view'/></td>";
+                echo "</form>";
+        
+            }
+         }   
     }
 }	
 	
