@@ -6,7 +6,7 @@
  * CSCI 467/1 Fall 2021
  * Group 2B
  */
-print_r($_POST);
+//print_r($_POST);
 include("credentials.php");	// Store your $username and $password in this file
 include("dbLoginFunc.php");
 
