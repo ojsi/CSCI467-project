@@ -27,7 +27,7 @@ try {
 		$prepared = $pdoQuoteDB->prepare($query);
 		$prepared->execute(array($_POST['quoteID']));
 
-		echo "<h1>Finalized ${_POST['quoteID']} the quote!</h1>\n";
+		echo "<h1>Finalized the quote!</h1>\n";
 
 		//echo "<a href='CustomerAccess.php'>Click here to return to the Quote Creation interface.</a>\n";
 
