@@ -27,8 +27,6 @@ display: inline;}
     </form>
 </div>
 <?php
-
-print_r($_POST);
 	
 //include login
 include("login.php");
@@ -40,12 +38,20 @@ try {
 	$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 	
 	//add new user
-	if(isset($_POST['name'])) 
+	if(isset($_POST['add'])) 
 	{
 		$query = "INSERT INTO SalesAssoc (name,passwd) VALUES(:name, :pass);";
 		$addNewSA = $pdo->prepare($query);
 		$return = $addNewSA->execute(array(':name' => $_POST['name'], ':pass' => $_POST['passwd']));
 	}
+
+	//kill
+	if(isset($_POST['delete'])) 
+		{
+			$delquery = "DELETE FROM SalesAssoc WHERE salesAID = :delIDnum";
+			$removeSA = $pdo->prepare($delquery);			
+			$result2 = $removeSA->execute(array(':delIDnum' => $_POST['delIDnum']));
+		}
 
 	//get sales associates from DB
 	$rs = $pdo->query("SELECT DISTINCT salesAID,name,accumComm,address FROM SalesAssoc ;");
@@ -69,20 +75,14 @@ try {
 			//edit button
 			echo "<form action='./edit_assoc.php' method='GET'>";
 			echo "<input type='hidden' name='IDnum' value='${rows['salesAID']}'/>";
-			echo "<td><input type='submit' value='Edit User' id='view'/></td>";
+			echo "<td><input name='edit' type='submit' value='Edit User' id='view'/></td>";
 			echo "</form>";
 			
 			//delete sales assoc
 			echo "<form action='./admin_interface.php' method='POST'>";
 			echo "<input type='hidden' name='delIDnum' value='${rows['salesAID']}'/>";
-			echo "<td><input type='submit' value='Delete' id='delete_sales'/></td>";
-
-			if(isset($_POST['submit'])) 
-			{
-				$delquery = "DELETE FROM SalesAssoc WHERE salesAID = :delIDnum";
-				$removeSA = $pdo->prepare($delquery);
-				$removeSA->execute(array(':delIDnum' => $_POST['salesAID']));
-			}
+			echo "<td><input name='delete' type='submit' value='Delete' id='delete_sales'/></td>";
+			echo "</form>";
 		}	
 	}
 	echo "</table>";	
@@ -97,7 +97,7 @@ try {
 	echo "<label for='passwd'>Create Password: </label>";
 	echo "<input type='text' id='passwd' name='passwd''/> &nbsp";
 
-	echo "<input type='submit' class ='button' value='Add New Associate'/>";
+	echo "<input type='submit' name='add' class ='button' value='Add New Associate'/>";
 	echo "<input type='hidden' name='submit' value='0'>"; 
 	echo "</form>";
 
