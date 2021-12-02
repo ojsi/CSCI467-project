@@ -4,7 +4,7 @@
  * Group 2B
  */
 
-include("login.php");	// Store your $username and $password in this file
+include("credentials.php");	// Store your $username and $password in this file
 include("dbLoginFunc.php");
 
 
