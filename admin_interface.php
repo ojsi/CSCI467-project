@@ -27,6 +27,8 @@ display: inline;}
     </form>
 </div>
 <?php
+
+print_r($_POST);
 	
 //include login
 include("login.php");
@@ -36,13 +38,19 @@ try {
 	$dsn = "mysql:host=courses;dbname=z1842318";
 	$pdo = new PDO($dsn, $username, $password);
 	$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-
+	
+	//add new user
+	if(isset($_POST['name'])) 
+	{
+		$query = "INSERT INTO SalesAssoc (name,passwd) VALUES(:name, :pass);";
+		$addNewSA = $pdo->prepare($query);
+		$return = $addNewSA->execute(array(':name' => $_POST['name'], ':pass' => $_POST['passwd']));
+	}
 
 	//get sales associates from DB
 	$rs = $pdo->query("SELECT DISTINCT salesAID,name,accumComm,address FROM SalesAssoc ;");
 	if(!$rs){echo"ERROR in Sales Associate Database"; die();}
 	$rows = $rs->fetchALL(PDO::FETCH_ASSOC);
-	
 
 	//show table
 	echo " <table border='0' cellpadding='10'><tr><th> Associate ID </th><th> Name </th><th> Commission </th><th> Address </th>";
@@ -61,20 +69,19 @@ try {
 			//edit button
 			echo "<form action='./edit_assoc.php' method='GET'>";
 			echo "<input type='hidden' name='IDnum' value='${rows['salesAID']}'/>";
-			echo "<td><input type='submit' value='Edit' id='edit_sales'/></td>";
+			echo "<td><input type='submit' value='Edit User' id='view'/></td>";
 			echo "</form>";
 			
 			//delete sales assoc
-			echo "<form action='./edit_assoc.php' method='POST'>";
+			echo "<form action='./admin_interface.php' method='POST'>";
 			echo "<input type='hidden' name='delIDnum' value='${rows['salesAID']}'/>";
 			echo "<td><input type='submit' value='Delete' id='delete_sales'/></td>";
 
-			if(isset($_POST['name'])) 
+			if(isset($_POST['submit'])) 
 			{
 				$delquery = "DELETE FROM SalesAssoc WHERE salesAID = :delIDnum";
-				$removeSA = $pdoQuoteDB->prepare($query);
+				$removeSA = $pdo->prepare($delquery);
 				$removeSA->execute(array(':delIDnum' => $_POST['salesAID']));
-				unset($_POST['name']);
 			}
 		}	
 	}
@@ -83,21 +90,16 @@ try {
 	//add associate
 	echo "<h3>Add New Sales Associate</h3>\n";
 	echo "<form action='./admin_interface.php' method='POST'>";
+
 	echo "<label for='name'>Name: </label>";
 	echo "<input type='text' id='name' name='name'/> &nbsp";
+
 	echo "<label for='passwd'>Create Password: </label>";
 	echo "<input type='text' id='passwd' name='passwd''/> &nbsp";
-	echo "<input type='submit' class ='button' value='Add New Associate'/>";
-	echo "</form>";
 
-	//add new user
-	if(isset($_GET['name'])) 
-	{
-		$query = "INSERT INTO SalesAssoc (name,passwd) VALUES(:name, :pass);";
-		$addNewSA = $pdoQuoteDB->prepare($query);
-		$addNewSA->execute(array(':name' => $_POST['name'], ':pass' => $_POST['passwd']));
-		unset($_POST['name']);
-	}
+	echo "<input type='submit' class ='button' value='Add New Associate'/>";
+	echo "<input type='hidden' name='submit' value='0'>"; 
+	echo "</form>";
 
 }
 catch(PDOexception $e) {

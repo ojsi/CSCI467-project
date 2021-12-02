@@ -125,14 +125,10 @@ try {
 	echo "</form>";
 
 	/* SHOW QUOTES WITH PARAMETERS */
-
-	
 	if(isset($_POST['submission'])){
 		$sales=$_POST['salesA'];
 		$status=$_POST['status'];
         $cust=$_POST['custName'];
-        //$dateLow=$_POST['dateL'];
-        //$dateUp=$_POST['dateU'];
 	} 
 
 	if(($_POST['submission']) == '0'){
@@ -146,7 +142,7 @@ try {
 			echo "None.";
 		} else {
 			// output data of each row
-			echo " <table border='0' cellpadding='10'><tr><th> Quote ID </th><th> Status </th><th> Date Created </th><th> SA/ID </th><th> C/ID </th><th> Notes </th>";
+			echo " <table border='0' cellpadding='10'><tr><th> Quote ID </th><th> Status </th><th> Date Created </th><th> SA/ID </th><th> C/ID </th>";
 			foreach($rows as $rows) {
                 echo "  <tr>\n";
 				echo "    <td>${rows['quoteID']}</td>";
@@ -154,7 +150,6 @@ try {
 				echo "    <td>${rows['procDateTime']}</td>";
 				echo "    <td>${rows['salesAID']}</td>";
 				echo "    <td>${rows['customerID']}</td>";
-				echo "    <td>${rows['sNotes']}</td>";
 
 				//edit button
 				echo "<form action='./view_quote.php' method='GET'>";
@@ -177,7 +172,7 @@ try {
 			echo "None.";
 		} else {
 			// output data of each row
-			echo " <table border='0' cellpadding='10'><tr><th> Quote ID </th><th> Status </th><th> Date Created </th><th> SA/ID </th><th> C/ID </th><th> Notes </th>";
+			echo " <table border='0' cellpadding='10'><tr><th> Quote ID </th><th> Status </th><th> Date Created </th><th> SA/ID </th><th> C/ID </th>";
 			foreach($rows as $rows) {
                 echo "  <tr>\n";
 				echo "    <td>${rows['quoteID']}</td>";
@@ -185,7 +180,6 @@ try {
 				echo "    <td>${rows['procDateTime']}</td>";
 				echo "    <td>${rows['salesAID']}</td>";
 				echo "    <td>${rows['customerID']}</td>";
-				echo "    <td>${rows['sNotes']}</td>";
 
 				//edit button
 				echo "<form action='./view_quote.php' method='GET'>";
@@ -207,7 +201,7 @@ try {
 		if (empty($rows)) {
 			echo "None.";
 		} else {
-			echo " <table border='0' cellpadding='10'><tr><th> Quote ID </th><th> Status </th><th> Date Created </th><th> SA/ID </th><th> C/ID </th><th> Notes </th>";
+			echo " <table border='0' cellpadding='10'><tr><th> Quote ID </th><th> Status </th><th> Date Created </th><th> SA/ID </th><th> C/ID </th>";
 			// output data of each row
 			foreach($rows as $rows) {
                 echo "  <tr>\n";
@@ -216,7 +210,6 @@ try {
 				echo "    <td>${rows['procDateTime']}</td>";
 				echo "    <td>${rows['salesAID']}</td>";
 				echo "    <td>${rows['customerID']}</td>";
-				echo "    <td>${rows['sNotes']}</td>";
 
 				//edit button
 				echo "<form action='./view_quote.php' method='GET'>";
@@ -243,7 +236,7 @@ try {
         if (empty($rows)) {
             echo "None.";
           } else {
-			echo " <table border='0' cellpadding='10'><tr><th> Quote ID </th><th> Status </th><th> Date Created </th><th> SA/ID </th><th> C/ID </th><th> Notes </th>";
+			echo " <table border='0' cellpadding='10'><tr><th> Quote ID </th><th> Status </th><th> Date Created </th><th> SA/ID </th><th> C/ID </th>";
             // output data of each row
             foreach($rows as $rows) {
                 echo "  <tr>\n";
@@ -252,7 +245,6 @@ try {
                 echo "    <td>${rows['procDateTime']}</td>";
                 echo "    <td>${rows['salesAID']}</td>";
                 echo "    <td>${rows['customerID']}</td>";
-                echo "    <td>${rows['sNotes']}</td>";
     
                 //edit button
                 echo "<form action='./view_quote.php' method='GET'>";
@@ -273,7 +265,7 @@ try {
 		if (empty($rows)) {
             echo "None.";
           } else {
-			echo " <table border='0' cellpadding='10'><tr><th> Quote ID </th><th> Status </th><th> Date Created </th><th> SA/ID </th><th> C/ID </th><th> Notes </th>";
+			echo " <table border='0' cellpadding='10'><tr><th> Quote ID </th><th> Status </th><th> Date Created </th><th> SA/ID </th><th> C/ID </th>";
             // output data of each row
             foreach($rows as $rows) {
                 echo "  <tr>\n";
@@ -282,7 +274,6 @@ try {
                 echo "    <td>${rows['procDateTime']}</td>";
                 echo "    <td>${rows['salesAID']}</td>";
                 echo "    <td>${rows['customerID']}</td>";
-                echo "    <td>${rows['sNotes']}</td>";
     
                 //edit button
                 echo "<form action='./view_quote.php' method='GET'>";

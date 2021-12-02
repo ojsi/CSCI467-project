@@ -43,25 +43,33 @@ try {
 		echo "Email: <input value=$email readonly></input></br>";
 	}
 
-	echo "<h3><b>Line Items:</b></h3></br>";
-    echo "<table cellspacing=5 border=1>";
-    $cost = 0;
+	$quoteComm = $quote_info[0]['commission'];
+	echo "<br>Quote Commission: " . $quoteComm;
+
+	echo "<h3><b>Line Items:</b></h3>";
+    echo "<table border='0' cellpadding='10'><tr><th> Description </th><th> ID </th>";
+	$cost = 0;
     foreach($line_info as $item)
     {
-        echo "<tr>";
+		echo "<tr>\n";
         echo "<td>";
         echo $item["description"];
         echo "</td>";
         echo "<td>";
         echo $item["lineID"];
         echo "</td>";
-        echo "</tr>";
-		$cost += $item["price"];
 	}
 	echo "<table/>";
+
+	echo "<h3><b>Notes:</b></h3>";
+	$sNotes = $quote_info[0]['sNotes'];
+	echo $sNotes;
+	echo "<br>";
+	echo "<br>";
 	
 
 	$saName = $sa_info[0]['name'];
+	echo "<br>";
 	echo "Sale Associate: " . $saName;
 
 
