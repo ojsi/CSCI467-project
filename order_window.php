@@ -32,80 +32,87 @@ h2 {
 include("./common_functions.php");
 include("./login.php");
 
-echo "<form action=\"http://students.cs.niu.edu/~z1896564/Project2B_467_Ordering_System/result.php\" method=\"GET\" >";
+try {
 
-//Log into the local database
-$pdo = login_to_database("courses", $username, $username, $password);
-//Log into legacy database - this is for customer information
-//need to grab customer information
-$legacy = login_to_database("blitz.cs.niu.edu","csci467","student","student");
+    echo "<form action=\"http://students.cs.niu.edu/~z1896564/Project2B_467_Ordering_System/result.php\" method=\"GET\" >";
 
-//Get all quote information from database
-$quote_info = get_information("SELECT * FROM Quote WHERE quoteID={$_GET["quoteID"]};",$pdo);
-//Get line item information
-$line_items = get_information("SELECT * FROM LineItem WHERE quoteID={$_GET["quoteID"]};",$pdo);
-//Get customer information
-$customer_info = get_information("SELECT * FROM customers WHERE id={$quote_info[0]["customerID"]};",$legacy);
+    //Log into the local database
+    $pdo = login_to_database("courses", $username, $username, $password);
+    //Log into legacy database - this is for customer information
+    //need to grab customer information
+    $legacy = login_to_database("blitz.cs.niu.edu","csci467","student","student");
 
-//Outline customer information in new form
-echo "<h2>Quote for " . $customer_info[0]["name"] . "</h2></br>";
-echo $customer_info[0]["city"] . "</br>";
-echo $customer_info[0]["street"] . "</br>";
-$number = $customer_info[0]["contact"];
-echo "<div id=\"phone\">$number</div>";
-echo "</br>";
-//inputs for submission to p.o.p.s.
-echo "<input name=\"orderid\" value={$quote_info[0]["quoteID"]} hidden></input>";
-echo "<input name=\"salesid\" value={$quote_info[0]["salesAID"]} hidden></input>";
-echo "<input name=\"custid\" value={$quote_info[0]["customerID"]} hidden></input>";
+    //Get all quote information from database
+    $quote_info = get_information("SELECT * FROM Quote WHERE quoteID={$_GET["quoteID"]};",$pdo);
+    //Get line item information
+    $line_items = get_information("SELECT * FROM LineItem WHERE quoteID={$_GET["quoteID"]};",$pdo);
+    //Get customer information
+    $customer_info = get_information("SELECT * FROM customers WHERE id={$quote_info[0]["customerID"]};",$legacy);
 
-//print email
-$email = $quote_info[0]["cusContact"];
-if(!is_numeric($email))
-    echo "Email: <input value=$email readonly></input></br>";
+    //Outline customer information in new form
+    echo "<h2>Quote for " . $customer_info[0]["name"] . "</h2></br>";
+    echo $customer_info[0]["city"] . "</br>";
+    echo $customer_info[0]["street"] . "</br>";
+    $number = $customer_info[0]["contact"];
+    echo "<div id=\"phone\">$number</div>";
+    echo "</br>";
+    //inputs for submission to p.o.p.s.
+    echo "<input name=\"orderid\" value={$quote_info[0]["quoteID"]} hidden></input>";
+    echo "<input name=\"salesid\" value={$quote_info[0]["salesAID"]} hidden></input>";
+    echo "<input name=\"custid\" value={$quote_info[0]["customerID"]} hidden></input>";
 
-//Make table of line items
-echo "<h3><b>Line Items:</b></h3></br>";
-echo "<table cellspacing=5 border=1>";
-$cost = 0;
-foreach($line_items as $item)
+    //print email
+    $email = $quote_info[0]["cusContact"];
+    if(!is_numeric($email))
+        echo "Email: <input value=$email readonly></input></br>";
+
+    //Make table of line items
+    echo "<h3><b>Line Items:</b></h3></br>";
+    echo "<table cellspacing=5 border=1>";
+    $cost = 0;
+    foreach($line_items as $item)
+    {
+        echo "<tr>";
+        echo "<td>";
+        echo $item["description"];
+        echo "</td>";
+        echo "<td>";
+        echo $item["lineID"];
+        echo "</td>";
+        echo "</tr>";
+        $cost += $item["price"];
+    }
+    echo "</table></br>";
+    //close table
+
+    //Make secret notes textbox
+    echo "<h3><b>Secret Notes</b></h3>";
+    echo "<textarea id=\"notes\" rows=\"5\" cols=\"50\" readonly>";
+    echo $quote_info[0]["sNotes"];
+    echo "</textarea></br>";
+    //end secret notes
+
+    //Discount box
+    //add button for percent and amount
+    echo "Discount: <input type=\"number\" id=\"discount_value\" step=\"0.01\" min=\"0\" value=0.00/>";
+    echo "<button onclick=\"calculateTotal()\" >Apply</button></br>";
+    echo "<input type=\"radio\" id=\"discount\" name=\"discount_type\" value=\"0\" checked/> percent </br>";
+    echo "<input type=\"radio\" id=\"discount\" name=\"discount_type\" value=\"1\" /> amount </br>";
+    echo "<p>Total: $<input id=\"cost\" name=\"cost\" value=$cost readonly></p>";
+    //Calculate total amount w/ Javascript?
+
+    //Send information to new web page that sends information to purchase order processing system
+    //Need order number
+    //sales associate id number
+    //customer id
+    //dollar amount
+    echo "<input type=\"submit\" value=\"Send Order\" ></input>";
+    echo "</form>";
+
+}catch (PDOException $e)
 {
-    echo "<tr>";
-    echo "<td>";
-    echo $item["description"];
-    echo "</td>";
-    echo "<td>";
-    echo $item["lineID"];
-    echo "</td>";
-    echo "</tr>";
-    $cost += $item["price"];
+    echo "<p>An error has occurred: " . $e->getMessage() . "</p>";  //print error if can't connect
 }
-echo "</table></br>";
-//close table
-
-//Make secret notes textbox
-echo "<h3><b>Secret Notes</b></h3>";
-echo "<textarea id=\"notes\" rows=\"5\" cols=\"50\" readonly>";
-echo $quote_info[0]["sNotes"];
-echo "</textarea></br>";
-//end secret notes
-
-//Discount box
-//add button for percent and amount
-echo "Discount: <input type=\"number\" id=\"discount_value\" step=\"0.01\" min=\"0\" value=0.00/>";
-echo "<button onclick=\"calculateTotal()\" >Apply</button></br>";
-echo "<input type=\"radio\" id=\"discount\" name=\"discount_type\" value=\"0\" checked/> percent </br>";
-echo "<input type=\"radio\" id=\"discount\" name=\"discount_type\" value=\"1\" /> amount </br>";
-echo "<p>Total: $<input id=\"cost\" name=\"cost\" value=$cost readonly></p>";
-//Calculate total amount w/ Javascript?
-
-//Send information to new web page that sends information to purchase order processing system
-//Need order number
-//sales associate id number
-//customer id
-//dollar amount
-echo "<input type=\"submit\" value=\"Send Order\" ></input>";
-echo "</form>";
 
 ?>
 

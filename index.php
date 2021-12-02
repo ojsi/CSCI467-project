@@ -32,53 +32,60 @@
 include("./common_functions.php");
 include("./login.php"); //central database login information
 
-//Log into the local database
-$pdo = login_to_database("courses", $username, $username, $password);
-//Log into legacy database - this is for customer information
-//need to grab customer name
-$legacy = login_to_database("blitz.cs.niu.edu","csci467","student","student");
+try {
 
-//Create a query that gets all quotes that have status value 2 "sanctioned"
-//Dont need to prepare since we don't take in user input
-$sql_query = "SELECT quoteID, procDateTime, name, commission, customerID FROM Quote,SalesAssoc WHERE status=2 AND Quote.salesAID=SalesAssoc.salesAID GROUP BY quoteID ORDER BY quoteID;";
-$rs = $pdo->prepare($sql_query, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-$rs->execute();
-$rows = $rs->fetchAll(PDO::FETCH_ASSOC);
+    //Log into the local database
+    $pdo = login_to_database("courses", $username, $username, $password);
+    //Log into legacy database - this is for customer information
+    //need to grab customer name
+    $legacy = login_to_database("blitz.cs.niu.edu","csci467","student","student");
 
-//As long as rows exist
-if(!empty($rows))
-{
-    //For result, we need quote id, date, sales assoc, customer name, price
-    echo "Sanctioned Quotes";
-    echo "<div class=\"results\">"; //for styling
-    $count = 0;
-    echo "<table cellspacing=1 border=1 >"; //table definition
-    foreach($rows as $row)
+    //Create a query that gets all quotes that have status value 2 "sanctioned"
+    //Dont need to prepare since we don't take in user input
+    $sql_query = "SELECT quoteID, procDateTime, name, commission, customerID FROM Quote,SalesAssoc WHERE status=2 AND Quote.salesAID=SalesAssoc.salesAID GROUP BY quoteID ORDER BY quoteID;";
+    $rs = $pdo->prepare($sql_query, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+    $rs->execute();
+    $rows = $rs->fetchAll(PDO::FETCH_ASSOC);
+
+    //As long as rows exist
+    if(!empty($rows))
     {
-        echo "<form action=\"http://students.cs.niu.edu/~z1896564/Project2B_467_Ordering_System/order_window.php\" method=\"GET\" >";
-        $qid = $row["quoteID"];
-        //get customer info from legacy database based on customerID in quote
-        $legacy_query = "SELECT name, contact FROM customers WHERE id={$row["customerID"]};";
-        $rs = $legacy->prepare($legacy_query, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
-        $rs->execute();
-        $results = $rs->fetchAll(PDO::FETCH_ASSOC);
-        //Need to get the customer name from the legacy database
-        echo "<tr>";
-        echo "<td>" . $row["quoteID"] . " (" . $row["procDateTime"] . "): " . $row["name"] . " - " . $results[0]["name"] . "</td>";
-        echo "<td>" . "$" . $row["commission"] .  "</td>";
-        echo "<td>" . "<input type=\"submit\" value=\"Send Purchase Order\" method=\"GET\" action=\"order_window.php\" />";
-        echo "</tr>";
-        echo "<input type=\"hidden\" name=\"quoteID\" value=$qid />";
-        echo "</br>";
-        echo "</form>";
-        $count++;   //number of sanctioned quotes
+        //For result, we need quote id, date, sales assoc, customer name, price
+        echo "Sanctioned Quotes";
+        echo "<div class=\"results\">"; //for styling
+        $count = 0;
+        echo "<table cellspacing=1 border=1 >"; //table definition
+        foreach($rows as $row)
+        {
+            echo "<form action=\"http://students.cs.niu.edu/~z1896564/Project2B_467_Ordering_System/order_window.php\" method=\"GET\" >";
+            $qid = $row["quoteID"];
+            //get customer info from legacy database based on customerID in quote
+            $legacy_query = "SELECT name, contact FROM customers WHERE id={$row["customerID"]};";
+            $rs = $legacy->prepare($legacy_query, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+            $rs->execute();
+            $results = $rs->fetchAll(PDO::FETCH_ASSOC);
+            //Need to get the customer name from the legacy database
+            echo "<tr>";
+            echo "<td>" . $row["quoteID"] . " (" . $row["procDateTime"] . "): " . $row["name"] . " - " . $results[0]["name"] . "</td>";
+            echo "<td>" . "$" . $row["commission"] .  "</td>";
+            echo "<td>" . "<input type=\"submit\" value=\"Send Purchase Order\" method=\"GET\" action=\"order_window.php\" />";
+            echo "</tr>";
+            echo "<input type=\"hidden\" name=\"quoteID\" value=$qid />";
+            echo "</br>";
+            echo "</form>";
+            $count++;   //number of sanctioned quotes
+        }
+        echo "</table>";
+        echo "</div>";
+        echo "There are <b>" . $count . "</b> sanctioned quotes.";  //output total number of quotes
+    } else 
+    {
+        echo "There are no sanctioned quotes to display.";
     }
-    echo "</table>";
-    echo "</div>";
-    echo "There are <b>" . $count . "</b> sanctioned quotes.";  //output total number of quotes
-} else 
+
+}catch (PDOException $e)
 {
-    echo "There are no sanctioned quotes to display.";
+    echo "<p>Could not connect to database: " . $e->getMessage() . "</p>";  //print error if can't connect
 }
 
 ?>
