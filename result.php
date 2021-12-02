@@ -81,7 +81,7 @@ if(!isset($res->errors))    //check if no errors
 //return to the home page of the processing system
 function returnToHome()
 {
-    window.location.assign("http://students.cs.niu.edu/~z1896564/Project2B_467_Ordering_System/interface3.php");
+    window.location.href = "./interface3.php";
 }
 
 window.onload = returnToHome;  //when page loads return home
