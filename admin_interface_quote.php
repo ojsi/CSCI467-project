@@ -49,9 +49,9 @@ try {
     //date - lower bound
     echo "<form action='./admin_interface_quote.php' method='POST'>";
 
-	echo "<label>From: </label><input type='date' name='dateL'>";
-    echo "<label>&nbspTo: </label><input type='date' name='dateU'>";
-
+	echo "<label>From </label><input type='date' name='dateL'>";
+	echo "&nbsp";
+    echo "<label>to </label><input type='date' name='dateU'>";
 	echo "&nbsp";
 	echo "<input type='submit' class ='button' value='Sort By Parameters'/>";
     echo "<input type='hidden' name='submission' value='3'>";
@@ -265,10 +265,10 @@ try {
 
     } elseif(($_POST['submission']) == '3') {
 
-        $dateLow=date('YYYY-MM-DD HH:MM:SS',strtotime($_POST['dateL']));
-        $dateUp=date('YYYY-MM-DD HH:MM:SS.ffffff',strtotime($_POST['dateU']));
+        $dateLow=date('Y-M-D H:i:s',strtotime($_POST['dateL']));
+        $dateUp=date('Y-M-D H:i:s',strtotime($_POST['dateU']));
        
-        $rs = $pdo->query("SELECT * FROM Quote WHERE procDateTime > $dateLow;");
+        $rs = $pdo->query("SELECT * FROM Quote WHERE procDateTime BETWEEN convert(datetime,'$dateLow') AND convert(datetime,'$dateUp');");
         if(!$rs){echo"ERROR in Database"; die();}
         $rows = $rs->fetchALL(PDO::FETCH_ASSOC);
 
