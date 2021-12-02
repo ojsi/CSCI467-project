@@ -30,7 +30,7 @@ h2 {
 <?php
 //Reusable functions (drawing tables, loging into database, etc)
 include("./common_functions.php");
-include("./login.php");
+include("./credentials.php");
 
 try {
 
