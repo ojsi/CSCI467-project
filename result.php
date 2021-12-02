@@ -45,9 +45,10 @@ $result = file_get_contents($url, false, $context); //get the result from the po
 $res = json_decode($result);    //decode the result
 
 //Conver process day and time to usable datetime for sql
-$timestamp = strtotime($res->processDay);   //convert to unix timestamp
+if(isset($res->processDay)) 
+    $timestamp = strtotime($res->processDay);   //convert to unix timestamp
 
-if(json_last_error() === JSON_ERROR_NONE)
+if(!isset($res->errors))    //check if no errors
 {
     $com = null;
     $update_query = null;
@@ -70,8 +71,9 @@ if(json_last_error() === JSON_ERROR_NONE)
 {
     echo "Transaction already exists. Updating...";
     $query = "UPDATE Quote SET status=3 WHERE quoteID={$_GET["orderid"]};";
-    $rs = $pdo->prepare($update_query, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
+    $rs = $pdo->prepare($query, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
     $rs->execute();
+    echo "<script>alert(\"Purchase order already exists for $res->name.\")</script>";
 }
 ?>
 
