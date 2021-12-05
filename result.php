@@ -31,7 +31,7 @@ $data = array(
 	'amount' => $_GET["cost"]       //cost
 );
 
-//Options for pushing to pops - from sample programs in 
+//Options for pushing to pops - from sample programs in project page
 $options = array(
     'http' => array(
         'header' => array('Content-type: application/json', 'Accept: application/json'),
@@ -54,7 +54,7 @@ if(!isset($res->errors))    //check if no errors
     $update_query = null;
     //Update quote database and sales commission database
     if(isset($res->commission)) //update if commission value exists
-        $com = floatval($res->amount) * (floatval($res->commission) * 0.01);
+        $com = floatval($res->amount) * (floatval($res->commission) * 0.01);	//calculate the total commission
     if(isset($res->processDay) && isset($com))  //check if results actually exist
     {
         //Update quote database and sales associate database query
@@ -62,15 +62,16 @@ if(!isset($res->errors))    //check if no errors
             WHERE quoteID={$_GET["orderid"]};
             UPDATE SalesAssoc SET accumComm=accumComm+$com WHERE salesAID={$_GET["salesid"]};";
 
+	//prepare and execute queary
         $rs = $pdo->prepare($update_query, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
         $rs->execute();
         echo "Order was processed.";
         echo "<script>alert(\"Email has been sent to $res->name\")</script>";
     }
-} else 
+} else //the transaction already exists
 {
     echo "Transaction already exists. Updating...";
-    $query = "UPDATE Quote SET status=3 WHERE quoteID={$_GET["orderid"]};";
+    $query = "UPDATE Quote SET status=3 WHERE quoteID={$_GET["orderid"]};";	//update the status of the order to 3
     $rs = $pdo->prepare($query, array(PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY));
     $rs->execute();
     echo "<script>alert(\"Purchase order already exists for $res->name.\")</script>";
@@ -81,7 +82,7 @@ if(!isset($res->errors))    //check if no errors
 //return to the home page of the processing system
 function returnToHome()
 {
-    window.location.href = "./interface3.php";
+    window.location.href = "./interface3.php";	//update window location to home after page loads
 }
 
 window.onload = returnToHome;  //when page loads return home
