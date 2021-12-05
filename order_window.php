@@ -95,11 +95,10 @@ try {
     //Discount box
     //add button for percent and amount
     echo "Discount: <input type=\"number\" id=\"discount_value\" step=\"0.01\" min=\"0\" value=0.00/>";
-    echo "<button type='button' onclick=\"calculateTotal()\" >Apply</button></br>";
+    echo "<button type='button' onclick=\"calculateTotal()\" >Apply</button></br>"; //when button is pressed update the current total
     echo "<input type=\"radio\" id=\"discount\" name=\"discount_type\" value=\"0\" checked/> percent </br>";
     echo "<input type=\"radio\" id=\"discount\" name=\"discount_type\" value=\"1\" /> amount </br>";
     echo "<p>Total: $<input id=\"cost\" name=\"cost\" value=$cost readonly></p>";
-    //Calculate total amount w/ Javascript?
 
     //Send information to new web page that sends information to purchase order processing system
     //Need order number
@@ -118,8 +117,6 @@ try {
 
 <script>
 //Calculate the total price when a discount is applied.
-//Percent -> 0
-//Amoutn -> 1
 function calculateTotal()
 {
     text = document.getElementById('cost').value; //get cost text
