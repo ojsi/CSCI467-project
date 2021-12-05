@@ -65,9 +65,9 @@ try {
             $rs->execute();
             $results = $rs->fetchAll(PDO::FETCH_ASSOC);
             //Need to get the customer name from the legacy database
-            echo "<tr>";
+            echo "<tr>";    //table formatting
             echo "<td>" . $row["quoteID"] . " (" . $row["procDateTime"] . "): " . $row["name"] . " - " . $results[0]["name"] . "</td>";
-            //echo "<td>" . "$" . $row["commission"] .  "</td>";
+            //echo "<td>" . "$" . $row["commission"] .  "</td>";    //remove commission since its unnecessary and usually inaccurate
             echo "<td>" . "<input type=\"submit\" value=\"Send Purchase Order\" method=\"GET\" action=\"./order_window.php\" />";
             echo "</tr>";
             echo "<input type=\"hidden\" name=\"quoteID\" value=$qid />";
@@ -75,7 +75,7 @@ try {
             echo "</form>";
             $count++;   //number of sanctioned quotes
         }
-        echo "</table>";
+        echo "</table>";    //close table
         echo "</div>";
         echo "There are <b>" . $count . "</b> sanctioned quotes.";  //output total number of quotes
     } else 
@@ -83,7 +83,7 @@ try {
         echo "There are no sanctioned quotes to display.";
     }
 
-}catch (PDOException $e)
+}catch (PDOException $e)    //display error if can't connect
 {
     echo "<p>Could not connect to database: " . $e->getMessage() . "</p>";  //print error if can't connect
 }
