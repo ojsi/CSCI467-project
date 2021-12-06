@@ -1,4 +1,5 @@
 <!-- visit page at http://students.cs.niu.edu/~z1842318/admin_interface.php -->
+<!-- This is the "Sales Associate" page for the adnim interface -->
 
 <html><head>
 	<title>Admin Interface - Viewing Sales Associates</title>
@@ -45,7 +46,7 @@ try {
 		$return = $addNewSA->execute(array(':name' => $_POST['name'], ':pass' => $_POST['passwd'], ':comm' => $_POST['comm'], ':addr' => $_POST['addr']));
 	}
 
-	//kill
+	//delete a sales associate
 	if(isset($_POST['delete'])) 
 		{
 			$delquery = "DELETE FROM SalesAssoc WHERE salesAID = :delIDnum";
@@ -78,7 +79,7 @@ try {
 			echo "<td><input name='edit' type='submit' value='Edit User' id='view'/></td>";
 			echo "</form>";
 			
-			//delete sales assoc
+			//delete button
 			echo "<form action='./admin_interface.php' method='POST'>";
 			echo "<input type='hidden' name='delIDnum' value='${rows['salesAID']}'/>";
 			echo "<td><input name='delete' type='submit' value='Delete' id='delete_sales'/></td>";
@@ -87,7 +88,7 @@ try {
 	}
 	echo "</table>";	
 
-	//add associate
+	//add associate button and form
 	echo "<h3>Add New Sales Associate</h3>\n";
 	echo "<form action='./admin_interface.php' method='POST'>";
 
