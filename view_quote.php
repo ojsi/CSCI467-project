@@ -27,9 +27,12 @@ try {
 	$sa_info = get_information("SELECT salesAID,name FROM SalesAssoc WHERE salesAID={$quote_info[0]['salesAID']};",$pdo);
 	$cus_info = get_information("SELECT * FROM customers WHERE id={$quote_info[0]['customerID']};",$pdo2);
 
+	
+	/* Printing Quote Information*/
+	
+	//customer name and information
 	$cusName = $cus_info[0]['name'];
 	
-
 	echo "<h2>Viewing Quote Details for $cusName</h2>\n";
 
 	echo $cus_info[0]["city"] . "</br>";
@@ -43,9 +46,11 @@ try {
 		echo "Email: <input value=$email readonly></input></br>";
 	}
 
+	//quote comm 
 	$quoteComm = $quote_info[0]['commission'];
 	echo "<br>Quote Commission: " . $quoteComm;
 
+	//line items
 	echo "<h3><b>Line Items:</b></h3>";
     echo "<table border='0' cellpadding='10'><tr><th> Description </th><th> ID </th>";
 	$cost = 0;
@@ -61,6 +66,7 @@ try {
 	}
 	echo "<table/>";
 
+	//secret notes
 	echo "<h3><b>Notes:</b></h3>";
 	$sNotes = $quote_info[0]['sNotes'];
 	echo $sNotes;
@@ -68,6 +74,7 @@ try {
 	echo "<br>";
 	
 
+	//sales associate who created the quote
 	$saName = $sa_info[0]['name'];
 	echo "<br>";
 	echo "Sale Associate: " . $saName;
