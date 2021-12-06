@@ -1,3 +1,5 @@
+<!-- visit page at http://students.cs.niu.edu/~z1842318/admin_interface_quote.php -->
+<!-- This is the "Sales Associate" page for the adnim interface -->
 <html><head>
     <title>Admin Interface - Viewing Quotes</title>
 </head>
@@ -45,8 +47,7 @@ try {
 	$pdo2->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     /* DROP DOWN OPTIONS */
-
-    //date - lower bound
+    //date range select 
     echo "<form action='./admin_interface_quote.php' method='POST'>";
 
 	echo "<label>From </label><input type='date' name='dateL'>";
@@ -82,7 +83,7 @@ try {
 	echo "<input type='hidden' name='dateU' value='dateU'>";
 	echo "</form>";
 
-	//get all customers for sort
+//get all customers for sort
 	echo "<form action='./admin_interface_quote.php' method='POST'>";
 	echo "<label for='custName'> Customer:</label>";
 	$rs3 = $pdo2->query("SELECT id,name FROM customers;");
@@ -103,7 +104,7 @@ try {
 	echo "<input type='hidden' name='dateU' value='dateU'>";
 	echo "</form>";
 	
-	//quote status
+//quote status
 	echo "<form action='./admin_interface_quote.php' method='POST'>";
 	echo "<label for='status'> Quote Status:</label>";
 	echo "&nbsp<select name='status' id='status'>";
@@ -222,10 +223,6 @@ try {
 
     } elseif(($_POST['submission']) == '3') {
 
-        //$dateLow=date('Y-m-d H:i:s',strtotime($_POST['dateL']));
-		//$dateUp=date('Y-m-d H:i:s',strtotime($_POST['dateU']));
-		
-		//$dateLow = ($_POST['dateL']);
 		$dateLow = strtotime(($_POST['dateL']));
 		$dateUp = strtotime(($_POST['dateU']));
        
