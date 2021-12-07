@@ -1,4 +1,9 @@
-
+<!--
+    Ojas DhiYogi - Z1849680, Group 2B
+    Quote System
+    CSCI 467
+    This page allows the sales associate to login into the system
+    -->
 <?php
 include("credentials.php");	// Store your $username and $password in this file
 include("dbLoginFunc.php");
@@ -59,7 +64,7 @@ echo '<html>
     <h1>Sales Associate Login</h1>
   </div>
   <div class="p-1 m-1 btn-group d-flex">
-    <a href="index.html" class="btn btn-dark" role="button">Back To The Home Page</a>
+    <a href="index.php" class="btn btn-dark" role="button">Back To The Home Page</a>
   </div>
 <!--Login Form with validation--> ';
 if($success){

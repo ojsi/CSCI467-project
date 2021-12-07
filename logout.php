@@ -1,3 +1,10 @@
+    <!--
+    Ojas DhiYogi - Z1849680, Group 2B
+    Quote System
+    CSCI 467
+    This is used to handle when the sales associate wants 
+    to logout of the system
+    -->
 <html>
 
 <head>

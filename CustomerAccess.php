@@ -1,5 +1,11 @@
 <!DOCTYPE html>
-
+    <!--
+    Ojas DhiYogi - Z1849680, Group 2B
+    Quote System
+    CSCI 467
+    Used by the sales associate after login to select the customer
+    from the legacy database for the creation of the quote.
+    -->
     <!-- Proccess Search for Customer Name-->
     <?php
     echo '<html>

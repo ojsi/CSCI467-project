@@ -1,3 +1,9 @@
+<!--
+    Ojas DhiYogi - Z1849680, Group 2B
+    Quote System
+    CSCI 467
+    This is the interface where sales associates can make new quotes
+    -->
 <div class="p-1 btn-group d-flex">
 <a href="logout.php" class="btn btn-danger" role="button" target="_self">Logout</a>
 </div>
@@ -6,7 +12,7 @@
  * CSCI 467/1 Fall 2021
  * Group 2B
  */
-//print_r($_POST);
+print_r($_POST);
 include("credentials.php");	// Store your $username and $password in this file
 include("dbLoginFunc.php");
 
